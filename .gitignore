@@ -1,0 +1,19 @@
+# Dépendances
+node_modules/
+.next/
+out/
+dist/
+
+# Environnements
+.env
+.env.local
+.env.production
+
+# Logs & fichiers temporaires
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+
+# Système
+*.log
