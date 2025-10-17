@@ -1,57 +1,169 @@
+"use client";
+
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
 export default function ContactPage() {
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setStatus("loading");
+    setErrorMsg("");
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    const name = formData.get("name");
+    const email = formData.get("email");
+    const message = formData.get("message");
+
+    // ✅ URL dynamique : local ou production (Vercel)
+    const baseUrl =
+      process.env.NODE_ENV === "production"
+        ? "https://ryad-dev-web.vercel.app"
+        : "http://localhost:3000";
+
+    try {
+      const res = await fetch(`${baseUrl}/api/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
+
+      if (!res.ok) throw new Error("Erreur d’envoi");
+
+      setStatus("success");
+      form.reset();
+      setTimeout(() => setStatus("idle"), 4000);
+    } catch (err) {
+      setStatus("error");
+      setErrorMsg("Une erreur est survenue. Réessaie plus tard.");
+      setTimeout(() => setStatus("idle"), 4000);
+    }
+  }
+
   return (
     <section className="max-w-2xl mx-auto">
-      <h1 className="text-4xl font-mono font-bold mb-6 text-center">
+      <motion.h1
+        className="text-4xl font-mono font-bold mb-6 text-center"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
         Me contacter
-      </h1>
-      <p className="text-center text-[#4B4540] mb-10">
+      </motion.h1>
+
+      <motion.p
+        className="text-center text-[#4B4540] mb-10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+      >
         Un projet, une idée ou une refonte ? Remplissez le formulaire et je vous
         répondrai rapidement.
-      </p>
+      </motion.p>
 
-      <form className="space-y-6">
-        <div>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
           <label className="block text-sm mb-2 font-semibold" htmlFor="name">
             Nom
           </label>
           <input
             id="name"
+            name="name"
             type="text"
+            required
             placeholder="Votre nom"
             className="w-full border border-[#EAE5E1] bg-[#FDF9F6] rounded-lg px-4 py-2 focus:outline-none focus:border-[#4B4540]"
           />
-        </div>
+        </motion.div>
 
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
           <label className="block text-sm mb-2 font-semibold" htmlFor="email">
             Email
           </label>
           <input
             id="email"
+            name="email"
             type="email"
+            required
             placeholder="votre@email.com"
             className="w-full border border-[#EAE5E1] bg-[#FDF9F6] rounded-lg px-4 py-2 focus:outline-none focus:border-[#4B4540]"
           />
-        </div>
+        </motion.div>
 
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+        >
           <label className="block text-sm mb-2 font-semibold" htmlFor="message">
             Message
           </label>
           <textarea
             id="message"
+            name="message"
+            required
             placeholder="Décrivez votre projet..."
             rows={5}
             className="w-full border border-[#EAE5E1] bg-[#FDF9F6] rounded-lg px-4 py-2 focus:outline-none focus:border-[#4B4540]"
           />
-        </div>
+        </motion.div>
 
-        <button
+        <motion.button
           type="submit"
-          className="border border-[#2B2320] px-6 py-3 rounded-xl font-mono text-sm hover:bg-[#2B2320] hover:text-[#FDF9F6] transition"
+          disabled={status === "loading"}
+          className={`border border-[#2B2320] px-6 py-3 rounded-xl font-mono text-sm transition ${
+            status === "loading"
+              ? "opacity-50 cursor-not-allowed"
+              : "hover:bg-[#2B2320] hover:text-[#FDF9F6]"
+          }`}
+          whileTap={{ scale: 0.97 }}
+          transition={{ type: "spring", stiffness: 300 }}
         >
-          Envoyer
-        </button>
+          {status === "loading" ? "Envoi en cours..." : "Envoyer"}
+        </motion.button>
+
+        {/* Message animé */}
+        <AnimatePresence>
+          {status === "success" && (
+            <motion.p
+              key="success"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="text-green-600 font-semibold mt-4 flex items-center gap-2"
+            >
+              ✅ Message envoyé avec succès !
+            </motion.p>
+          )}
+
+          {status === "error" && (
+            <motion.p
+              key="error"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="text-red-600 font-semibold mt-4"
+            >
+              ❌ {errorMsg}
+            </motion.p>
+          )}
+        </AnimatePresence>
       </form>
     </section>
   );

@@ -1,39 +1,60 @@
-
-import { NextResponse } from "next/server";
-
-export async function POST(request: Request) {
+export async function POST(req: Request) {
   try {
-    const { name, email, message } = await request.json();
+    // Import dynamique -> empêche le blocage du dev server
+    const nodemailer = (await import("nodemailer")).default;
 
-    // If SMTP env vars are not set, just log and return success (dev mode)
-    const hasSMTP = process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS && process.env.SMTP_PORT;
-    if (!hasSMTP) {
-      console.log("[CONTACT - DEV LOG]", { name, email, message });
-      return NextResponse.json({ ok: true, dev: true });
+    // Récupération des données du formulaire
+    const { name, email, message } = await req.json();
+
+    if (!name || !email || !message) {
+      return new Response(
+        JSON.stringify({ error: "Tous les champs sont obligatoires." }),
+        { status: 400 }
+      );
     }
 
-    // Dynamic import to avoid bundling in edge runtimes
-    const nodemailer = (await import("nodemailer")).default;
+    // Création du transporteur Nodemailer
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT || 587),
-      secure: false,
+      port: Number(process.env.SMTP_PORT) || 587,
+      secure: false, // true pour le port 465, false pour 587
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
     });
 
+    // Envoi du mail
     await transporter.sendMail({
-      from: `"ModernSite" <no-reply@modern-site.local>`,
-      to: process.env.CONTACT_TO || process.env.SMTP_USER,
-      subject: `Nouveau message de ${name}`,
-      text: `Nom: ${name}\nEmail: ${email}\n\n${message}`,
+      from: `"${name}" <${email}>`,
+      to: process.env.CONTACT_TO, // Ton adresse mail
+      subject: `Nouveau message depuis RyadDevWeb`,
+      text: `
+        Nom : ${name}
+        Email : ${email}
+        Message :
+        ${message}
+      `,
+      html: `
+        <div style="font-family: sans-serif; color: #333;">
+          <h2>Nouveau message reçu depuis ton site RyadDevWeb</h2>
+          <p><strong>Nom :</strong> ${name}</p>
+          <p><strong>Email :</strong> ${email}</p>
+          <p><strong>Message :</strong></p>
+          <p style="background:#f9f9f9;padding:10px;border-radius:8px;">${message}</p>
+        </div>
+      `,
     });
 
-    return NextResponse.json({ ok: true });
-  } catch (e) {
-    console.error(e);
-    return NextResponse.json({ ok: false, error: "Erreur lors de l'envoi." }, { status: 500 });
+    // Réponse de succès
+    return new Response(JSON.stringify({ success: true }), { status: 200 });
+  } catch (error) {
+    console.error("Erreur API contact:", error);
+    return new Response(
+      JSON.stringify({
+        error: "Erreur lors de l’envoi du message. Réessaie plus tard.",
+      }),
+      { status: 500 }
+    );
   }
 }
