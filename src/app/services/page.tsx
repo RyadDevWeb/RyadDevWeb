@@ -1,78 +1,54 @@
-import Link from "next/link";
+"use client";
+
+import { motion } from "framer-motion";
 
 const services = [
   {
-    title: "Création de site vitrine",
-    description:
-      "Un site moderne, rapide et responsive, pensé pour valoriser votre activité et attirer de nouveaux clients.",
+    title: "💻 Site vitrine",
+    desc: "Idéal pour les entreprises ou indépendants souhaitant présenter leurs activités. Design sur mesure, responsive et optimisé pour le référencement.",
+    price: "À partir de 600 €",
+  },
+  {
+    title: "🔄 Refonte de site",
+    desc: "Modernisation du design et amélioration de l’expérience utilisateur pour donner une nouvelle vie à votre site.",
     price: "À partir de 500 €",
-    features: [
-      "Design sur mesure",
-      "Développement Next.js + Tailwind",
-      "Optimisation SEO",
-      "Formulaire de contact professionnel",
-    ],
   },
   {
-    title: "Refonte de site existant",
-    description:
-      "Modernisation visuelle et technique de votre site pour offrir une meilleure expérience et un style actuel.",
-    price: "À partir de 1 000 €",
-    features: [
-      "Audit visuel et technique",
-      "Nouveau design responsive",
-      "Migration du contenu",
-      "Amélioration des performances",
-    ],
+    title: "⚡ SEO & Performance",
+    desc: "Optimisation du code et du contenu pour améliorer votre visibilité et accélérer le chargement de vos pages.",
+    price: "Sur devis",
   },
   {
-    title: "Suivi et mises à jour ponctuelles",
-    description:
-      "Je reste disponible après la livraison pour assurer la continuité et les petites évolutions de votre site.",
-    price: "À partir de 80 € / intervention",
-    features: [
-      "Corrections mineures",
-      "Changements d’images ou textes",
-      "Ajout de sections simples",
-      "Assistance rapide par email",
-    ],
+    title: "🛠️ Maintenance mensuelle",
+    desc: "Mises à jour, sécurité et suivi technique pour garder votre site stable dans le temps.",
+    price: "À partir de 30 €/mois",
   },
 ];
 
 export default function ServicesPage() {
   return (
-    <section>
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-mono font-bold mb-4">Services</h1>
-        <p className="text-[#4B4540] max-w-2xl mx-auto">
-          Des prestations claires et efficaces pour donner à votre entreprise
-          une présence en ligne professionnelle.
-        </p>
-      </div>
+    <section className="max-w-5xl mx-auto px-6 py-20">
+      <motion.h1
+        className="text-4xl md:text-5xl font-mono font-bold mb-12 text-center"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        Mes services
+      </motion.h1>
 
-      <div className="grid gap-8 md:grid-cols-3">
-        {services.map((service) => (
-          <div
-            key={service.title}
-            className="border border-[#EAE5E1] bg-[#FDF9F6] rounded-2xl p-8 hover:shadow-[0_4px_16px_rgba(0,0,0,0.05)] transition"
+      <div className="grid md:grid-cols-2 gap-10">
+        {services.map((service, i) => (
+          <motion.div
+            key={i}
+            className="border border-[#EAE5E1] bg-[#FDF9F6] rounded-2xl p-8 shadow-sm hover:shadow-md transition"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.2 }}
           >
-            <h3 className="text-2xl font-mono font-semibold mb-2">
-              {service.title}
-            </h3>
-            <p className="text-[#4B4540] mb-3">{service.description}</p>
-            <p className="font-semibold mb-4">{service.price}</p>
-            <ul className="list-disc list-inside text-sm text-[#4B4540] mb-6">
-              {service.features.map((f) => (
-                <li key={f}>{f}</li>
-              ))}
-            </ul>
-            <Link
-              href="/contact"
-              className="inline-block border border-[#2B2320] px-5 py-2 rounded-lg font-mono text-sm hover:bg-[#2B2320] hover:text-[#FDF9F6] transition"
-            >
-              Demander un devis
-            </Link>
-          </div>
+            <h3 className="text-xl font-bold mb-2">{service.title}</h3>
+            <p className="text-[#4B4540] mb-4">{service.desc}</p>
+            <p className="font-mono text-sm text-[#2B2320]">{service.price}</p>
+          </motion.div>
         ))}
       </div>
     </section>

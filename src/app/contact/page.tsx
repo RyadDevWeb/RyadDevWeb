@@ -21,14 +21,9 @@ export default function ContactPage() {
     const email = formData.get("email");
     const message = formData.get("message");
 
-    // ✅ URL dynamique : local ou production (Vercel)
-    const baseUrl =
-      process.env.NODE_ENV === "production"
-        ? "https://ryad-dev-web.vercel.app"
-        : "http://localhost:3000";
-
     try {
-      const res = await fetch(`${baseUrl}/api/contact`, {
+      // ✅ Utilisation d’un chemin relatif (marche en local + Vercel)
+      const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, message }),
@@ -36,10 +31,13 @@ export default function ContactPage() {
 
       if (!res.ok) throw new Error("Erreur d’envoi");
 
+      console.log("✅ Message envoyé :", { name, email, message });
+
       setStatus("success");
       form.reset();
       setTimeout(() => setStatus("idle"), 4000);
     } catch (err) {
+      console.error("❌ Erreur d’envoi :", err);
       setStatus("error");
       setErrorMsg("Une erreur est survenue. Réessaie plus tard.");
       setTimeout(() => setStatus("idle"), 4000);
@@ -47,7 +45,7 @@ export default function ContactPage() {
   }
 
   return (
-    <section className="max-w-2xl mx-auto">
+    <section className="max-w-2xl mx-auto px-6 py-20">
       <motion.h1
         className="text-4xl font-mono font-bold mb-6 text-center"
         initial={{ opacity: 0, y: -10 }}
@@ -63,16 +61,12 @@ export default function ContactPage() {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3 }}
       >
-        Un projet, une idée ou une refonte ? Remplissez le formulaire et je vous
-        répondrai rapidement.
+        Vous avez un projet, une idée ou besoin d’un site web ? Remplissez le
+        formulaire ci-dessous, je vous réponds sous 24h.
       </motion.p>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
+        <div>
           <label className="block text-sm mb-2 font-semibold" htmlFor="name">
             Nom
           </label>
@@ -84,13 +78,9 @@ export default function ContactPage() {
             placeholder="Votre nom"
             className="w-full border border-[#EAE5E1] bg-[#FDF9F6] rounded-lg px-4 py-2 focus:outline-none focus:border-[#4B4540]"
           />
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
+        <div>
           <label className="block text-sm mb-2 font-semibold" htmlFor="email">
             Email
           </label>
@@ -102,13 +92,9 @@ export default function ContactPage() {
             placeholder="votre@email.com"
             className="w-full border border-[#EAE5E1] bg-[#FDF9F6] rounded-lg px-4 py-2 focus:outline-none focus:border-[#4B4540]"
           />
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-        >
+        <div>
           <label className="block text-sm mb-2 font-semibold" htmlFor="message">
             Message
           </label>
@@ -120,7 +106,7 @@ export default function ContactPage() {
             rows={5}
             className="w-full border border-[#EAE5E1] bg-[#FDF9F6] rounded-lg px-4 py-2 focus:outline-none focus:border-[#4B4540]"
           />
-        </motion.div>
+        </div>
 
         <motion.button
           type="submit"
@@ -131,12 +117,11 @@ export default function ContactPage() {
               : "hover:bg-[#2B2320] hover:text-[#FDF9F6]"
           }`}
           whileTap={{ scale: 0.97 }}
-          transition={{ type: "spring", stiffness: 300 }}
         >
           {status === "loading" ? "Envoi en cours..." : "Envoyer"}
         </motion.button>
 
-        {/* Message animé */}
+        {/* Messages de statut */}
         <AnimatePresence>
           {status === "success" && (
             <motion.p
@@ -145,7 +130,7 @@ export default function ContactPage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3 }}
-              className="text-green-600 font-semibold mt-4 flex items-center gap-2"
+              className="text-green-600 font-semibold mt-4"
             >
               ✅ Message envoyé avec succès !
             </motion.p>
