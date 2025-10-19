@@ -11,7 +11,7 @@ const services = [
   {
     title: "🔄 Refonte de site",
     desc: "Modernisation du design et amélioration de l’expérience utilisateur pour donner une nouvelle vie à votre site.",
-    price: "À partir de 500 €",
+    price: "À partir de 450 €",
   },
   {
     title: "⚡ SEO & Performance",

@@ -14,15 +14,12 @@ export default function ContactPage() {
     setStatus("loading");
     setErrorMsg("");
 
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-
+    const formData = new FormData(e.currentTarget);
     const name = formData.get("name");
     const email = formData.get("email");
     const message = formData.get("message");
 
     try {
-      // ✅ Utilisation d’un chemin relatif (marche en local + Vercel)
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -31,13 +28,10 @@ export default function ContactPage() {
 
       if (!res.ok) throw new Error("Erreur d’envoi");
 
-      console.log("✅ Message envoyé :", { name, email, message });
-
       setStatus("success");
-      form.reset();
+      e.currentTarget.reset();
       setTimeout(() => setStatus("idle"), 4000);
     } catch (err) {
-      console.error("❌ Erreur d’envoi :", err);
       setStatus("error");
       setErrorMsg("Une erreur est survenue. Réessaie plus tard.");
       setTimeout(() => setStatus("idle"), 4000);
@@ -61,8 +55,7 @@ export default function ContactPage() {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3 }}
       >
-        Vous avez un projet, une idée ou besoin d’un site web ? Remplissez le
-        formulaire ci-dessous, je vous réponds sous 24h.
+        Un projet, une idée ? Remplissez le formulaire ci-dessous 👇
       </motion.p>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -121,7 +114,6 @@ export default function ContactPage() {
           {status === "loading" ? "Envoi en cours..." : "Envoyer"}
         </motion.button>
 
-        {/* Messages de statut */}
         <AnimatePresence>
           {status === "success" && (
             <motion.p

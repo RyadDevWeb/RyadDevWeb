@@ -1,107 +1,132 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
-
-const projects = [
-  {
-    title: "Nova Studio",
-    desc: "Agence de design digital — site vitrine épuré et moderne, avec animations fluides et mise en avant des services créatifs.",
-    img: "/images/nova-studio.webp.png",
-  },
-  {
-    title: "Maison Délice",
-    desc: "Restaurant gastronomique — design noir et doré, ambiance chic et raffinée, intégration d’un système de réservation.",
-    img: "/images/maison-delice.webp.png",
-  },
-  {
-    title: "Pulse Agency",
-    desc: "Startup SaaS — landing page performante, design dynamique, optimisée pour le SEO et la conversion.",
-    img: "/images/pulse-agency.webp.png",
-  },
-  {
-    title: "Élégance Coiffure",
-    desc: "Salon de coiffure — site sobre et élégant, pages services et galerie, prise de rendez-vous fluide.",
-    img: "/images/elegance-coiffure.webp.png",
-  },
-];
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function RealisationsPage() {
-  const [selectedImg, setSelectedImg] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string | null>(null);
+
+  const projects = [
+    {
+      id: "nova",
+      title: "Nova Studio — Agence Créative",
+      img: "/projects/nova-studio.png", // mets ton image ici
+      description:
+        "Site vitrine moderne pour une agence de design. Développement sous Next.js avec animations Framer Motion et design sur mesure.",
+      stack: ["Next.js", "Tailwind", "Framer Motion"],
+      link: "#",
+    },
+    {
+      id: "maison-delice",
+      title: "Maison Délice — Restaurant Gastronomique",
+      img: "/projects/maison-delice.png", // mets ton image ici
+      description:
+        "Création du site d’un restaurant haut de gamme. Design sombre et doré, intégration d’un système de réservation et galerie photo.",
+      stack: ["React", "Next.js", "SCSS"],
+      link: "#",
+    },
+    {
+      id: "elegance-coiffure",
+      title: "Élégance Coiffure — Salon de Beauté",
+      img: "/projects/elegance-coiffure.png", // mets ton image ici
+      description:
+        "Site élégant pour un salon de coiffure à Paris. Design clair, SEO optimisé et intégration d’un module de rendez-vous en ligne.",
+      stack: ["Next.js", "TailwindCSS"],
+      link: "#",
+    },
+  ];
 
   return (
     <section className="max-w-6xl mx-auto px-6 py-20">
       <motion.h1
-        className="text-4xl md:text-5xl font-mono font-bold mb-12 text-center"
-        initial={{ opacity: 0, y: -20 }}
+        className="text-4xl font-mono font-bold mb-10 text-center"
+        initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
       >
-        Mes réalisations
+        Mes Réalisations
       </motion.h1>
 
       <motion.p
-        className="text-center text-[#4B4540] mb-16"
+        className="text-center text-[#4B4540] mb-16 max-w-2xl mx-auto"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
+        transition={{ delay: 0.2 }}
       >
-        Chaque site est conçu pour refléter l’identité du client et offrir une
-        expérience unique. Cliquez sur les images pour les voir en grand 👇
+        Voici une sélection de projets que j’ai réalisés — entre modernité,
+        performance et design sur mesure.
       </motion.p>
 
-      {/* --- Grille de projets --- */}
-      <div className="grid md:grid-cols-2 gap-10">
-        {projects.map((p, i) => (
+      {/* ✅ Grille de projets */}
+      <div className="grid md:grid-cols-3 gap-10">
+        {projects.map((p, index) => (
           <motion.div
-            key={i}
-            className="border border-[#EAE5E1] rounded-2xl overflow-hidden bg-[#FDF9F6] hover:shadow-lg transition cursor-pointer"
+            key={p.id}
+            className="cursor-pointer group"
+            onClick={() => setSelected(p.id)}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.2 }}
-            onClick={() => setSelectedImg(p.img)}
+            transition={{ delay: 0.1 * index }}
           >
-            <Image
-              src={p.img}
-              alt={p.title}
-              width={600}
-              height={400}
-              className="w-full h-64 object-cover hover:scale-105 transition-transform duration-300"
-            />
-            <div className="p-6">
-              <h3 className="text-xl font-bold mb-2">{p.title}</h3>
-              <p className="text-[#4B4540] text-sm">{p.desc}</p>
+            <div className="overflow-hidden rounded-2xl shadow-lg border border-[#EAE5E1] bg-[#FDF9F6]">
+              <Image
+                src={p.img}
+                alt={p.title}
+                width={600}
+                height={400}
+                className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="p-5">
+                <h2 className="text-lg font-semibold mb-2 text-[#2B2320]">
+                  {p.title}
+                </h2>
+                <p className="text-sm text-[#4B4540]">{p.description}</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {p.stack.map((tech) => (
+                    <span
+                      key={tech}
+                      className="text-xs border border-[#CFC6BF] px-2 py-1 rounded-md"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
           </motion.div>
         ))}
       </div>
 
-      {/* --- Popup / Lightbox --- */}
+      {/* ✅ Pop-up quand on clique sur une image */}
       <AnimatePresence>
-        {selectedImg && (
+        {selected && (
           <motion.div
-            className="fixed inset-0 bg-black/80 flex justify-center items-center z-50 cursor-pointer"
+            className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setSelectedImg(null)}
+            onClick={() => setSelected(null)}
           >
             <motion.div
-              className="relative max-w-4xl max-h-[90vh]"
-              initial={{ scale: 0.8, opacity: 0 }}
+              className="relative max-w-4xl w-full mx-4"
+              initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
+              exit={{ scale: 0.9, opacity: 0 }}
             >
               <Image
-                src={selectedImg}
-                alt="Aperçu projet"
+                src={
+                  projects.find((p) => p.id === selected)?.img ||
+                  "/fallback.png"
+                }
+                alt="Aperçu du projet"
                 width={1200}
                 height={800}
-                className="rounded-xl object-contain w-auto h-auto max-h-[90vh]"
+                className="rounded-xl object-cover w-full"
               />
               <button
-                onClick={() => setSelectedImg(null)}
-                className="absolute top-4 right-4 bg-white/80 text-black px-3 py-1 rounded-full font-bold hover:bg-white"
+                className="absolute top-3 right-3 text-white text-xl bg-black/60 hover:bg-black/80 rounded-full px-3 py-1"
+                onClick={() => setSelected(null)}
               >
                 ✕
               </button>
@@ -109,23 +134,6 @@ export default function RealisationsPage() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      <motion.div
-        className="text-center mt-16"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
-      >
-        <p className="text-lg font-mono mb-4">
-          Vous avez un projet en tête ? 🚀
-        </p>
-        <a
-          href="/contact"
-          className="border border-[#2B2320] px-6 py-3 rounded-xl font-mono text-sm hover:bg-[#2B2320] hover:text-[#FDF9F6] transition"
-        >
-          Contactez-moi dès aujourd’hui
-        </a>
-      </motion.div>
     </section>
   );
 }
