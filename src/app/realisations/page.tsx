@@ -11,7 +11,7 @@ export default function RealisationsPage() {
     {
       id: "nova",
       title: "Nova Studio — Agence Créative",
-      img: "/projects/nova-studio.png", // mets ton image ici
+      img: "/images/nova-studio.webp.png", // mets ton image ici
       description:
         "Site vitrine moderne pour une agence de design. Développement sous Next.js avec animations Framer Motion et design sur mesure.",
       stack: ["Next.js", "Tailwind", "Framer Motion"],
@@ -20,7 +20,7 @@ export default function RealisationsPage() {
     {
       id: "maison-delice",
       title: "Maison Délice — Restaurant Gastronomique",
-      img: "/projects/maison-delice.png", // mets ton image ici
+      img: "/images/maison-delice.webp.png", // mets ton image ici
       description:
         "Création du site d’un restaurant haut de gamme. Design sombre et doré, intégration d’un système de réservation et galerie photo.",
       stack: ["React", "Next.js", "SCSS"],
@@ -29,7 +29,7 @@ export default function RealisationsPage() {
     {
       id: "elegance-coiffure",
       title: "Élégance Coiffure — Salon de Beauté",
-      img: "/projects/elegance-coiffure.png", // mets ton image ici
+      img: "/images/elegance-coiffure.webp.png", // mets ton image ici
       description:
         "Site élégant pour un salon de coiffure à Paris. Design clair, SEO optimisé et intégration d’un module de rendez-vous en ligne.",
       stack: ["Next.js", "TailwindCSS"],
