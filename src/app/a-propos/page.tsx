@@ -20,8 +20,8 @@ export default function APropos() {
         viewport={{ once: true }}
       >
         Je m’appelle <strong>Ryad</strong>, développeur web freelance basé à
-        Aulnay-sous-Bois. J’aide les entreprises à obtenir une présence en ligne
-        moderne, rapide et efficace.
+        Paris. J’aide les entreprises à obtenir une présence en ligne moderne,
+        rapide et efficace.
       </motion.p>
 
       <motion.p
