@@ -5,30 +5,31 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <section className="max-w-4xl mx-auto px-6 py-20 text-center">
+    <section className="py-20">
       <motion.h1
-        className="text-5xl md:text-6xl font-mono font-bold mb-6"
+        className="text-5xl md:text-6xl font-mono font-bold text-center"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        Création de sites web modernes et performants
+        Développeur web freelance — sites modernes & performants
       </motion.h1>
 
       <motion.p
-        className="text-[#4B4540] text-lg mb-10 leading-relaxed"
+        className="text-center text-[#4B4540] text-lg max-w-3xl mx-auto mt-6"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
+        transition={{ delay: 0.2 }}
       >
-        Je conçois des sites sur mesure pour les entreprises et indépendants —
-        esthétiques, rapides et pensés pour convertir vos visiteurs en clients.
+        Je conçois des sites sur mesure pour PME, indépendants et créateurs —
+        design élégant, rapidité et SEO pour transformer les visiteurs en
+        clients.
       </motion.p>
 
       <motion.div
-        className="flex justify-center gap-4"
+        className="flex justify-center gap-4 mt-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
+        transition={{ delay: 0.35 }}
       >
         <Link
           href="/realisations"
@@ -45,27 +46,31 @@ export default function Home() {
       </motion.div>
 
       <motion.div
-        className="mt-16 grid md:grid-cols-2 gap-6 text-left"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.7 }}
+        className="grid md:grid-cols-4 gap-6 mt-16"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={{
+          hidden: {},
+          visible: { transition: { staggerChildren: 0.12 } },
+        }}
       >
-        <div>
-          <h3 className="font-bold mb-2">💡 Design professionnel</h3>
-          <p>Des sites au rendu moderne et impactant.</p>
-        </div>
-        <div>
-          <h3 className="font-bold mb-2">⚙️ Optimisé pour Google</h3>
-          <p>Structure SEO-friendly, chargement rapide, responsive.</p>
-        </div>
-        <div>
-          <h3 className="font-bold mb-2">🧩 Sur mesure</h3>
-          <p>Chaque projet est conçu selon vos besoins spécifiques.</p>
-        </div>
-        <div>
-          <h3 className="font-bold mb-2">🤝 Accompagnement</h3>
-          <p>Je reste disponible après la mise en ligne.</p>
-        </div>
+        {[
+          ["💡 Design pro", "Interfaces modernes & élégantes"],
+          ["⚙️ Performance", "Chargement rapide & score élevé"],
+          ["🔎 SEO", "Structure optimisée pour Google"],
+          ["🤝 Suivi", "Accompagnement après mise en ligne"],
+        ].map(([t, s], i) => (
+          <motion.div
+            key={i}
+            className="border border-[#EAE5E1] bg-[#FDF9F6] rounded-2xl p-6 shadow-sm"
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+          >
+            <h3 className="font-bold mb-2">{t}</h3>
+            <p className="text-sm text-[#4B4540]">{s}</p>
+          </motion.div>
+        ))}
       </motion.div>
     </section>
   );

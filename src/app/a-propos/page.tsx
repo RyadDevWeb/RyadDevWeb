@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 
 export default function APropos() {
   return (
-    <section className="max-w-3xl mx-auto px-6 py-20">
+    <section className="py-20 max-w-3xl mx-auto">
       <motion.h1
-        className="text-4xl md:text-5xl font-mono font-bold mb-10 text-center"
+        className="text-4xl md:text-5xl font-mono font-bold text-center mb-8"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
@@ -14,51 +14,36 @@ export default function APropos() {
       </motion.h1>
 
       <motion.p
-        className="text-[#4B4540] leading-relaxed mb-6"
+        className="text-[#4B4540] leading-relaxed mb-5"
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
       >
         Je m’appelle <strong>Ryad</strong>, développeur web freelance basé à
-        Aulnay-sous-Bois. Passionné par le design et la technologie, j’aide les
-        entreprises à avoir une présence en ligne professionnelle et efficace.
+        Aulnay-sous-Bois. J’aide les entreprises à obtenir une présence en ligne
+        moderne, rapide et efficace.
       </motion.p>
 
       <motion.p
-        className="text-[#4B4540] leading-relaxed mb-6"
+        className="text-[#4B4540] leading-relaxed"
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
       >
-        Mon objectif : créer des sites web qui allient{" "}
-        <strong>esthétique, efficacité et simplicité</strong>. Chaque projet est
-        une collaboration : je traduis vos idées en un site clair, rapide et
-        unique.
+        Mon approche : <strong>design élégant</strong>,{" "}
+        <strong>performance</strong> et <strong>simplicité</strong>. Chaque
+        projet est une collaboration pour construire un site qui vous ressemble.
       </motion.p>
 
-      <motion.div
-        className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center mt-10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.7 }}
-      >
-        <div>
-          <p className="font-bold">🎨</p>
-          <p>Créativité</p>
-        </div>
-        <div>
-          <p className="font-bold">⚙️</p>
-          <p>Performance</p>
-        </div>
-        <div>
-          <p className="font-bold">💬</p>
-          <p>Clarté</p>
-        </div>
-        <div>
-          <p className="font-bold">🤝</p>
-          <p>Confiance</p>
-        </div>
-      </motion.div>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center mt-10">
+        {["🎨 Créativité", "⚙️ Performance", "💬 Clarté", "🤝 Confiance"].map(
+          (x) => (
+            <div key={x} className="border border-[#EAE5E1] rounded-xl py-4">
+              {x}
+            </div>
+          )
+        )}
+      </div>
     </section>
   );
 }

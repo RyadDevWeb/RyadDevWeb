@@ -14,46 +14,39 @@ export default function ContactPage() {
     setStatus("loading");
     setErrorMsg("");
 
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
     const name = formData.get("name");
     const email = formData.get("email");
     const message = formData.get("message");
+    const projectType = formData.get("projectType");
 
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, message }),
+        body: JSON.stringify({ name, email, message, projectType }),
       });
 
-      // 🔹 On récupère la réponse proprement
-      const data = await res.json();
+      if (!res.ok) throw new Error("Erreur d’envoi");
 
-      if (!res.ok || !data.success) {
-        throw new Error(data.error || "Erreur d’envoi");
-      }
-
-      // ✅ Succès
       setStatus("success");
-      e.currentTarget.reset();
+      form.reset();
       setTimeout(() => setStatus("idle"), 4000);
-    } catch (err: any) {
-      console.error("Erreur frontend:", err);
+    } catch (err) {
       setStatus("error");
-      setErrorMsg(
-        err.message || "Une erreur est survenue. Réessaie plus tard."
-      );
+      setErrorMsg("Une erreur est survenue. Réessaie plus tard.");
       setTimeout(() => setStatus("idle"), 4000);
     }
   }
 
   return (
-    <section className="max-w-2xl mx-auto px-6 py-20">
+    <section className="py-20 max-w-2xl mx-auto">
       <motion.h1
         className="text-4xl font-mono font-bold mb-6 text-center"
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
       >
         Me contacter
       </motion.h1>
@@ -62,9 +55,10 @@ export default function ContactPage() {
         className="text-center text-[#4B4540] mb-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
+        transition={{ delay: 0.2 }}
       >
-        Un projet, une idée ? Remplissez le formulaire ci-dessous 👇
+        Vous avez un projet ? Remplissez le formulaire, je vous réponds sous
+        24h.
       </motion.p>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -97,6 +91,25 @@ export default function ContactPage() {
         </div>
 
         <div>
+          <label
+            className="block text-sm mb-2 font-semibold"
+            htmlFor="projectType"
+          >
+            Type de projet
+          </label>
+          <select
+            id="projectType"
+            name="projectType"
+            className="w-full border border-[#EAE5E1] bg-[#FDF9F6] rounded-lg px-4 py-2 focus:outline-none focus:border-[#4B4540]"
+          >
+            <option>Site vitrine</option>
+            <option>Refonte</option>
+            <option>E-commerce</option>
+            <option>Autre</option>
+          </select>
+        </div>
+
+        <div>
           <label className="block text-sm mb-2 font-semibold" htmlFor="message">
             Message
           </label>
@@ -104,8 +117,8 @@ export default function ContactPage() {
             id="message"
             name="message"
             required
-            placeholder="Décrivez votre projet..."
             rows={5}
+            placeholder="Décrivez votre projet..."
             className="w-full border border-[#EAE5E1] bg-[#FDF9F6] rounded-lg px-4 py-2 focus:outline-none focus:border-[#4B4540]"
           />
         </div>
@@ -126,25 +139,22 @@ export default function ContactPage() {
         <AnimatePresence>
           {status === "success" && (
             <motion.p
-              key="success"
+              key="s"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
-              className="text-green-600 font-semibold mt-4"
+              className="text-green-600 font-semibold mt-2"
             >
-              ✅ Message envoyé avec succès !
+              ✅ Merci ! Message envoyé avec succès.
             </motion.p>
           )}
-
           {status === "error" && (
             <motion.p
-              key="error"
+              key="e"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
-              className="text-red-600 font-semibold mt-4"
+              className="text-red-600 font-semibold mt-2"
             >
               ❌ {errorMsg}
             </motion.p>
