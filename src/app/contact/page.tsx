@@ -26,14 +26,23 @@ export default function ContactPage() {
         body: JSON.stringify({ name, email, message }),
       });
 
-      if (!res.ok) throw new Error("Erreur d’envoi");
+      // 🔹 On récupère la réponse proprement
+      const data = await res.json();
 
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || "Erreur d’envoi");
+      }
+
+      // ✅ Succès
       setStatus("success");
       e.currentTarget.reset();
       setTimeout(() => setStatus("idle"), 4000);
-    } catch (err) {
+    } catch (err: any) {
+      console.error("Erreur frontend:", err);
       setStatus("error");
-      setErrorMsg("Une erreur est survenue. Réessaie plus tard.");
+      setErrorMsg(
+        err.message || "Une erreur est survenue. Réessaie plus tard."
+      );
       setTimeout(() => setStatus("idle"), 4000);
     }
   }
